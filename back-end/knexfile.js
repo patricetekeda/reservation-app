@@ -1,17 +1,11 @@
-/**
- * Knex configuration file.
- *
- * You will not need to make changes to this file.
- */
-
-require('dotenv').config();
+require("dotenv").config();
 const path = require("path");
 
 const {
-  DATABASE_URL = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_DEVELOPMENT = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_TEST = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_PREVIEW = "postgresql://postgres@localhost/postgres",
+  DATABASE_URL = "postgres://igkyifhw:AbTglO7FGjlpCvNTiQ_seNo2CLPcpKhu@salt.db.elephantsql.com/igkyifhw",
+  DATABASE_URL_DEVELOPMENT = "postgres://igkyifhw:AbTglO7FGjlpCvNTiQ_seNo2CLPcpKhu@salt.db.elephantsql.com/igkyifhw",
+  DATABASE_URL_TEST = "postgres://igkyifhw:AbTglO7FGjlpCvNTiQ_seNo2CLPcpKhu@salt.db.elephantsql.com/igkyifhw",
+  DATABASE_URL_PREVIEW = "postgres://igkyifhw:AbTglO7FGjlpCvNTiQ_seNo2CLPcpKhu@salt.db.elephantsql.com/igkyifhw",
   DEBUG,
 } = process.env;
 
