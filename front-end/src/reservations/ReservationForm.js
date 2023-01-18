@@ -1,70 +1,40 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { API_BASE_URL as url, findReservation } from "../utils/api";
-import { useHistory, useParams } from "react-router";
+import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import EditReservation from "./EditReservation";
-import NewReservation from "./NewReservation";
 
-const ReservationForm = ({ setDate }) => {
+const ReservationForm = ({
+  formType = "new",
+  reservationsError,
+  first_name,
+  last_name,
+  mobile_number,
+  people,
+  reservation_date,
+  reservation_time,
+  onChange,
+  onSubmit,
+}) => {
+  const [minTime, setMinTime] = useState(null);
   const history = useHistory();
-  const { reservation_id } = useParams();
-  const [reservation, setReservation] = useState({
-    first_name: "",
-    last_name: "",
-    mobile_number: "",
-    reservation_date: "",
-    reservation_time: "",
-    people: "",
-  });
-  const [reservationsError, setReservationsError] = useState(null);
 
   useEffect(() => {
-    const abortController = new AbortController();
-    reservation_id && findReservation(reservation_id).then(setReservation);
-    return () => abortController.abort();
-    // eslint-disable-next-line
-  }, []);
-
-  const { first_name, last_name, mobile_number, reservation_time } =
-    reservation;
-
-  let { reservation_date, people } = reservation;
-
-  reservation.reservation_date = reservation.reservation_date.slice(0, 10);
-
-  const onChange = (e) =>
-    setReservation({ ...reservation, [e.target.name]: e.target.value });
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setReservationsError(null);
-    reservation.people = Number(reservation.people);
-
-    if (!reservation_id) {
-      addReservation(reservation);
+    if (formType === "new") {
+      const currentDate = new Date();
+      const currentHour = currentDate.getHours();
+      const currentMinutes = currentDate.getMinutes();
+      const currentTime = `${currentHour}:${currentMinutes}`;
+      setMinTime(currentTime);
     } else {
-      updateReservation(reservation);
+      setMinTime(null);
     }
-    setDate(reservation.reservation_date);
-  };
+  }, [formType]);
 
   return (
     <div className="row justify-content-center">
       <form className="col-lg-10" onSubmit={onSubmit}>
         <h1 className="text-center py-4">
-          {reservation.reservation_id ? (
-            <EditReservation />
-          ) : (
-            <NewReservation
-              reservation={reservation}
-              setReservationsError={setReservationsError}
-              reservation_date={reservation_date}
-            />
-          )}{" "}
-          Reservation
+          {formType === "edit" ? "Edit" : "New"} Reservation
         </h1>
-
         <ErrorAlert error={reservationsError} />
         <div className="form-group">
           <label htmlFor="first_name">First Name</label>
@@ -78,7 +48,6 @@ const ReservationForm = ({ setDate }) => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="last_name">Last Name</label>
           <input
@@ -91,7 +60,6 @@ const ReservationForm = ({ setDate }) => {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="mobile_number">Mobile Number</label>
           <input
