@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL as url, findReservation } from "../utils/api";
-
 import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
+import EditReservation from "./EditReservation";
+import NewReservation from "./NewReservation";
 
 const ReservationForm = ({ setDate }) => {
   const history = useHistory();
@@ -30,35 +31,7 @@ const ReservationForm = ({ setDate }) => {
 
   let { reservation_date, people } = reservation;
 
-  reservation_date = reservation_date.slice(0, 10);
-
-  // Add Reservation
-  const addReservation = (reservation) => {
-    axios
-      .post(`${url}/reservations`, { data: reservation })
-      .then((res) => {
-        res.status === 201 &&
-          history.push(`/dashboard?date=${reservation.reservation_date}`);
-      })
-      .catch((err) => {
-        setReservationsError({ message: err.response.data.error });
-      });
-  };
-
-  // Update Reservation
-  const updateReservation = async (reservation) => {
-    axios
-      .put(`${url}/reservations/${reservation.reservation_id}`, {
-        data: reservation,
-      })
-      .then((res) => {
-        res.status === 200 &&
-          history.push(`/dashboard?date=${reservation.reservation_date}`);
-      })
-      .catch((err) => {
-        setReservationsError({ message: err.response.data.error });
-      });
-  };
+  reservation.reservation_date = reservation.reservation_date.slice(0, 10);
 
   const onChange = (e) =>
     setReservation({ ...reservation, [e.target.name]: e.target.value });
@@ -80,7 +53,16 @@ const ReservationForm = ({ setDate }) => {
     <div className="row justify-content-center">
       <form className="col-lg-10" onSubmit={onSubmit}>
         <h1 className="text-center py-4">
-          {reservation.reservation_id ? "Edit" : "New"} Reservation
+          {reservation.reservation_id ? (
+            <EditReservation />
+          ) : (
+            <NewReservation
+              reservation={reservation}
+              setReservationsError={setReservationsError}
+              reservation_date={reservation_date}
+            />
+          )}{" "}
+          Reservation
         </h1>
 
         <ErrorAlert error={reservationsError} />
