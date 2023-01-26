@@ -2,7 +2,7 @@
 # Restaurant Reservation Project
 ## Project Goals
 ### Restaurant Reservation System
-You have been hired as a full stack developer at Periodic Tables, a startup that is creating a reservation system for fine dining restaurants.
+This is a reservation app for a virtual company named Periodic Tables, a startup that is creating a reservation system for fine dining restaurants.
 The software is used only by restaurant personnel when a customer calls to request a reservation.
 Tools Used
 Node.JS
